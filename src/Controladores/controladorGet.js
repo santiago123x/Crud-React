@@ -14,8 +14,11 @@ const GeneraTabla = props => {
       if (opcion) {
         
            const borrar = await fetch(`http://localhost:5000/pacientes/${numid}`, { method: "DELETE" });
+           alert(`Se ha Eliminado el registro: ${numid}`);
+           window.location.reload();
       }
-      setTodos(Allpacientes.filter(paciente => paciente.numid !== numid));
+      //setTodos(Allpacientes.filter(paciente => paciente.numid !== numid));
+      
     } catch (err) {
       console.error(err.message);
     }
