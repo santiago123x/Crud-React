@@ -1,6 +1,7 @@
 import React, { Fragment, useEffect, useState } from "react";
-import { Button } from 'reactstrap';
-import Actualizar from './controladorActualizar';
+import {  Button } from 'reactstrap';
+
+
 
 const GeneraTabla = props => {
   const [Allpacientes, setTodos] = useState([]);
@@ -45,15 +46,20 @@ const GeneraTabla = props => {
 
   return(
     <Fragment>
+     
     {Allpacientes.map(paciente =>
       
         <tr key = {paciente.id}> 
-            <td>{paciente.id}</td>
-            <td>{paciente.nombre}</td>
-            <td>{paciente.apellido}</td>
-            <td>{paciente.numid}</td>
+            <td className="text-center align-middle">{paciente.id}</td>
+            <td className=" text-center align-middle">{paciente.nombre}</td>
+            <td className=" text-center align-middle">{paciente.apellido}</td>
+            <td className="text-center align-middle">{paciente.numid}</td>
+
+              <td className="text-center align-middle"> 
+              <Button   color='danger' onClick={()=>borrar(paciente.numid)}>Eliminar</Button>
+              
+            </td>
             
-            <td> <Button color='danger' onClick={()=>borrar(paciente.numid)}>Eliminar</Button></td>
     </tr>)}
         </Fragment>
   );

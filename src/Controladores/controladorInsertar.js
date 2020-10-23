@@ -1,129 +1,136 @@
-/*import React, { Fragment, useState } from "react";
+import React, { Fragment } from "react";
+import { Modal, ModalBody, ModalHeader, ModalFooter, Button, Form,  InputGroup, InputGroupText, InputGroupAddon, Input, ButtonToggle } from 'reactstrap';
 
 
-const InputTodo = () => {
-  const [description, setDescription] = useState("");
+class Insertar extends React.Component {
 
-  const onSubmitForm = async e => {
-    e.preventDefault();
-    try {
-      const body = { description };
-      const response = await fetch("basedatos/index/pacientes", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(body)
-      });
+  constructor(props) {
+    super(props);
+    this.state = {
+      nombre: '',
+      apellido: '',
+      numid: '',
+      modalInser: false
+    };
 
-      window.location = "/HospitalCentral";
-    } catch (err) {
-      console.error(err.message);
-    }
+    this.handleChange = this.handleChange.bind(this);
   };
 
-    
-  return (
-    
-    <ModalHeader>
-                            <div><h3>Insertar Registro</h3></div>
-                        </ModalHeader>
-                        <ModalBody>
-                            <FormGroup>
-                                <label>
-                                    id:
-                            </label>
-                                <input
-                                    className="form-control"
-                                    readOnly
-                                    type="text"
-                                    value={this.state.data.length + 1}
-                                />
-                            </FormGroup>
-                            <FormGroup>
-                                <label>
-                                    Nombre:
-                            </label>
-                                <input
-                                    className="form-control"
-                                    name="nombre"
-                                    type="text"
-                                    onChange={this.handleChange}
-                                />
-                            </FormGroup>
-                            <FormGroup>
-                                <label>
-                                    Apellido:
-                            </label>
-                                <input
-                                    className="form-control"
-                                    name="apellido"
-                                    type="text"
-                                    onChange={this.handleChange}
-                                />
-                            </FormGroup>
-                            <FormGroup>
-                                <label>
-                                    Codigo:
-                            </label>
-                                <input
-                                    className="form-control"
-                                    name="numid"
-                                    type="text"
-                                    onChange={this.handleChange}
-                                />
-                            </FormGroup>
-                        </ModalBody>
-                        <ModalFooter>
-                            <Button color="primary" onClick={() => this.envar()}>Insertar</Button>
-                            <Button color="danger" onClick={() => this.ocultarModalInsertar()}>Cancelar</Button>
-                        </ModalFooter>
-  );
-};
-
-export default InputTodo;
 
 
-/*
+  handleChange(event) {
+    const target = event.target;
+    const value = target.value;
+    const name = target.name;
 
-function envar(){
-  console.log('me diste un click');
-  let datos = new FormData(formulario);
-  let nombrepaciente = datos.get('nombre');
-  let apellidopaciente = datos.get('apellido');
-  let idpaciente = datos.get('identificacion');
+    this.setState({
+      [name]: value
+    });
+  };
 
-  let myHeaders = new Headers();
-
-  const options = {
-    method: 'POST',
-    headers: myHeaders,
-    body: new URLSearchParams({
-      'nombre': nombrepaciente,
-      'apellido': apellidopaciente,
-      'numid': idpaciente
-    }),
+  mostarInser() {
+    this.setState({
+      modalInser: !this.state.modalInser
+    });
   }
 
-  console.log('vamos a enviar a la base de datos');
-  fetch('/basedatos/insertarpaciente', options)
-    .then((res) => res.json())
-    .then((data) => {
-      console.log(data);
-    });
+  async insertar() {
+
+    if (window.confirm(`Desea agregar al paciente ${this.state.nombre}`)) {
+      try {
+
+        var nombre = this.state.nombre;
+        var apellido = this.state.apellido;
+        var numid = this.state.numid;
+
+        const body = { nombre, apellido, numid };
+
+        const response = await fetch("http://localhost:5000/pacientes", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(body)
+        });
+        alert(`Se ha agregado al paciente ${this.state.nombre}`);
+        window.location.reload();
+      } catch (err) {
+        console.error(err.message);
+      }
+    }
+  };
+  a
+
+
+  render() {
+    return (
+      <Fragment>
+
+        <ButtonToggle className="mb-3" color='primary' onClick={() => this.mostarInser()}>Insertar Nuevo Paciente</ButtonToggle>
+
+        <Modal
+          size="md"
+          centered isOpen={this.state.modalInser} id="insertar">
+          <ModalHeader>
+            <div><h3>Insertar Registro</h3></div>
+          </ModalHeader>
+          <ModalBody>
+
+            <Form className="d-flex mt-5" id='envio' >
+              <ul>
+                <div className="mb-3 pl-5 ">
+                  <InputGroup  >
+                    <InputGroupAddon addonType="prepend">
+                      <InputGroupText className="d-flex pl-3 pr-3">Nombre</InputGroupText>
+                    </InputGroupAddon>
+                    <Input id="nombre"
+                      placeholder="Nombre"
+                      className="form-control"
+                      name="nombre"
+                      type="text"
+                      value={this.state.nombre}
+                      onChange={this.handleChange} />
+                  </InputGroup>
+                </div>
+                <div className="mb-3 pl-5 " >
+                  <InputGroup  >
+                    <InputGroupAddon addonType="prepend">
+                      <InputGroupText className="d-flex pl-3 pr-3">Apellido</InputGroupText>
+                    </InputGroupAddon>
+                    <Input
+                      id="apellido"
+                      placeholder="Apellido"
+                      className="form-control"
+                      name="apellido"
+                      type="text"
+                      value={this.state.apellido}
+                      onChange={this.handleChange}
+                    /> </InputGroup>
+                </div>
+                <div className="pl-5 " >
+                  <InputGroup  >
+                    <InputGroupAddon addonType="prepend">
+                      <InputGroupText className="d-flex pl-3 pr-3">Codigo</InputGroupText>
+                    </InputGroupAddon>
+                    <Input
+                      id="numid"
+                      placeholder="Codigo"
+                      className="form-control"
+                      name="numid"
+                      type="text"
+                      value={this.state.numid}
+                      onChange={this.handleChange}
+                    /></InputGroup>
+                </div></ul>
+            </Form>
+          </ModalBody>
+          <ModalFooter >
+            <Button color="success" onClick={() => this.insertar()}>Insertar</Button>
+            <Button color="danger" onClick={() => this.mostarInser()}>Cancelar</Button>
+          </ModalFooter>
+        </Modal>
+      </Fragment>
+    );
+  };
 };
-*/
-/*--------------- borrar ---------------------------*/
-/*
 
+export default Insertar;
 
-
-
-/*------------------ Actualizar ----------------*/
-/*
-
-
-/*----------------consultar-------------------------*/
-/*
-
-
-
-*/
