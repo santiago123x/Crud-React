@@ -136,7 +136,7 @@ class Actualizar extends React.Component {
             </Form>
           </ModalBody>
           <ModalFooter >
-            <Button color="success" onClick={() => this.actualizar()}>Insertar</Button>
+            <Button color="success" onClick={() => this.actualizar()}>Editar</Button>
             <Button color="danger" onClick={() => this.mostarActua()}>Cancelar</Button>
           </ModalFooter>
         </Modal>
